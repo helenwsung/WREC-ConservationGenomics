@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>What Should We Protect?</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Rubik:wght@600;700&family=Nunito+Sans:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+/* VOICE everyday learning activity, calm and clear for a mixed audience
+   IDEA a field casebook: each stage is a card handed to the team, lab reports included
+   PICTURE estuary band with a crocodile's eyes at the waterline; then the current stage card large
+   COLOUR deep estuary teal, white ground, croc-eye gold, sunset coral for what's chosen
+   TYPE Rubik 700 display + Nunito Sans text
+   LAYOUT slim scene band with title, progress trail, one 820px column per stage; stacks on phones */
+:root{color-scheme:light dark;--bg:light-dark(#ffffff,#0a1d1c);--ink:light-dark(#10211f,#e6efed);--soft:light-dark(#4a5d5a,#a9bcb8);--panel:light-dark(#f0f5f3,#12302e);--line:light-dark(#d3e0dc,#24504c);--water:#0f4b49;--deep:#082e2d;--gold:#f2c14e;--accent:light-dark(#d9512f,#ff7a56);--accentbg:light-dark(#fff1ec,#3a1f17);--up:light-dark(#1f7a4d,#6fd3a0);--dn:light-dark(#b23a1e,#ff8f70)}
+:root[data-theme=light]{color-scheme:light}
+:root[data-theme=dark]{color-scheme:dark}
+*{box-sizing:border-box;min-width:0}
+html,body{margin:0}
+body{background:var(--bg);color:var(--ink);font:16px/1.55 "Nunito Sans",system-ui,sans-serif;overflow-x:clip}
+h1,h2,h3{font-family:Rubik,system-ui,sans-serif;letter-spacing:-.02em;line-height:1.1;margin:0}
+.hero{position:relative;background:linear-gradient(#0d3f3e,#082e2d);color:#eef6f4;overflow:hidden}
+.hero svg{display:block;width:100%;height:clamp(120px,18vw,180px)}
+.hero .t{position:absolute;inset:0 auto auto 0;padding:clamp(18px,3vw,32px) max(5vw,16px);max-width:620px}
+.hero h1{font-size:clamp(32px,4.6vw,46px);text-wrap:balance}
+.hero p{margin:8px 0 0;font-size:16px;color:#cfe3df;max-width:44ch}
+main{max-width:820px;margin:0 auto;padding:22px max(5vw,16px) 64px}
+.trail{display:flex;gap:6px;margin:0 0 22px;flex-wrap:wrap}
+.trail span{flex:1 1 60px;font-size:13px;color:var(--soft);border-top:5px solid var(--line);padding-top:6px}
+.trail span.on{border-color:var(--accent);color:var(--ink);font-weight:700}
+.trail span.done{border-color:var(--water)}
+.kick{font-size:14px;font-weight:700;color:var(--accent)}
+h2{font-size:clamp(26px,3.6vw,34px);margin:4px 0 10px}
+.lead{font-size:17px;margin:0 0 18px;max-width:68ch}
+.cards{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+.card{all:unset;box-sizing:border-box;cursor:pointer;display:grid;grid-template-columns:52px minmax(0,1fr);gap:4px 14px;padding:16px;border:2px solid var(--line);border-radius:14px;background:var(--panel)}
+.card:hover{border-color:var(--water)}
+.card:focus-visible,.opt:focus-visible,.btn:focus-visible,.term:focus-visible{outline:3px solid var(--gold);outline-offset:2px}
+.card[aria-pressed=true],.opt[aria-pressed=true]{border-color:var(--accent);background:var(--accentbg)}
+.card svg{grid-row:span 3;width:52px;height:52px}
+.card h3{font-size:19px}
+.card .d{font-size:15px}
+.card .e{font-size:14px;color:var(--soft)}
+.opts{display:grid;gap:10px}
+.opt{all:unset;box-sizing:border-box;cursor:pointer;padding:14px 16px;border:2px solid var(--line);border-radius:12px;background:var(--panel);min-height:44px}
+.opt:hover{border-color:var(--water)}
+.opt b{display:block;font-size:17px}
+.opt span{font-size:15px;color:var(--soft)}
+.report{background:var(--deep);color:#eef6f4;border-radius:16px;padding:20px 22px;margin:0 0 18px;position:relative}
+.report .k{color:var(--gold);font-weight:700;font-size:14px}
+.report h3{font-size:22px;margin:4px 0 8px;color:#fff}
+.report p{margin:0;font-size:17px;line-height:1.55}
+.report .term{color:#ffe08a;border-color:#ffe08a}
+.term{all:unset;cursor:pointer;border-bottom:2px dotted var(--water);font-weight:700}
+.panel{background:var(--panel);border:2px solid var(--line);border-radius:14px;padding:16px 18px;margin:0 0 16px}
+.ud{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;margin:0 0 16px}
+.ud div{border-radius:14px;padding:16px 18px;background:var(--panel);border-left:6px solid var(--up)}
+.ud div.dn{border-left-color:var(--dn)}
+.ud b{display:block;margin-bottom:4px}
+label{display:block;font-weight:700;margin:18px 0 6px}
+label span{font-weight:400;color:var(--soft)}
+textarea,input[type=text]{width:100%;font:16px/1.5 "Nunito Sans",sans-serif;color:var(--ink);background:var(--bg);border:2px solid var(--line);border-radius:10px;padding:10px 12px}
+textarea{min-height:100px;resize:vertical}
+input[type=text]{max-width:420px;min-height:44px}
+textarea:focus,input:focus{outline:none;border-color:var(--water)}
+.nav{display:flex;flex-wrap:wrap;gap:10px;margin-top:22px;align-items:center}
+.btn{font:700 16px "Nunito Sans",sans-serif;min-height:44px;padding:10px 20px;border-radius:999px;border:2px solid var(--water);background:var(--water);color:#fff;cursor:pointer;text-decoration:none;display:inline-flex;align-items:center}
+.btn.ghost{background:transparent;color:var(--ink);border-color:var(--line)}
+.btn:disabled,.btn[aria-disabled=true]{opacity:.45;cursor:not-allowed}
+.hint{font-size:14px;color:var(--soft)}
+.sum{background:var(--panel);border:2px solid var(--line);border-radius:14px;padding:6px 18px 12px;margin:16px 0}
+.sum h3{font-size:17px;margin:14px 0 4px}
+.sum p{margin:0;white-space:pre-wrap}
+.paths{display:grid;gap:10px}
+.paths div{padding:12px 16px;border-radius:12px;background:var(--panel)}
+.ok{color:var(--accent);font-weight:700}
+.sheet{position:fixed;left:50%;bottom:16px;transform:translateX(-50%);width:min(560px,calc(100% - 32px));background:var(--deep);color:#eef6f4;border-radius:16px;padding:18px 20px;box-shadow:0 10px 30px rgba(0,0,0,.3);z-index:9}
+.sheet h3{color:var(--gold);font-size:18px;margin:0 0 6px}
+.sheet p{margin:0 0 12px}
+.sheet .btn{background:#eef6f4;color:#082e2d;border-color:#eef6f4;min-height:40px;padding:6px 16px}
+@media(max-width:600px){.cards,.ud{grid-template-columns:minmax(0,1fr)}.hero .t{position:static;padding-bottom:0}.hero svg{height:96px}.trail span{flex-basis:36px;font-size:0}.trail span.on{font-size:13px;flex-basis:100%}}
+@media(prefers-reduced-motion:no-preference){.bob{animation:bob 5s ease-in-out infinite}@keyframes bob{50%{transform:translateY(3px)}}#stage{animation:in .35s ease-out}@keyframes in{from{opacity:0;transform:translateY(8px)}}}
+</style>
+</head>
+<body>
+<header class="hero">
+  <svg viewBox="0 0 1200 180" preserveAspectRatio="xMidYMax slice" aria-hidden="true">
+    <defs>
+      <linearGradient id="wt" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#1c6663"/><stop offset="1" stop-color="#062625"/></linearGradient>
+      <radialGradient id="sun" cx=".5" cy=".5" r=".5"><stop offset="0" stop-color="#ffb36b" stop-opacity=".55"/><stop offset="1" stop-color="#ffb36b" stop-opacity="0"/></radialGradient>
+    </defs>
+    <circle cx="1010" cy="90" r="130" fill="url(#sun)"/>
+    <g fill="#0a3534"><path d="M0 110 C60 84 90 100 140 92 C190 84 230 100 260 110Z"/><ellipse cx="60" cy="58" rx="46" ry="26"/><ellipse cx="110" cy="68" rx="40" ry="22"/><rect x="56" y="70" width="5" height="40"/><rect x="104" y="80" width="5" height="30"/></g>
+    <rect y="108" width="1200" height="72" fill="url(#wt)"/>
+    <g stroke="#3e8a85" stroke-width="2" stroke-linecap="round" opacity=".6"><path d="M520 138h60M640 156h90M330 165h50M880 146h70M1040 166h60"/></g>
+    <g class="bob">
+      <path d="M760 112 C780 98 820 94 860 98 C905 102 960 104 1010 110 Z" fill="#1d3a2c"/>
+      <g fill="#1d3a2c"><ellipse cx="868" cy="100" rx="16" ry="11"/><ellipse cx="900" cy="101" rx="16" ry="11"/><rect x="1003" y="103" width="10" height="7" rx="3"/></g>
+      <ellipse cx="866" cy="98" rx="6" ry="5" fill="#f2c14e"/><ellipse cx="898" cy="99" rx="6" ry="5" fill="#f2c14e"/>
+      <rect x="865" y="94.5" width="2" height="7" rx="1" fill="#1b1b12"/><rect x="897" y="95.5" width="2" height="7" rx="1" fill="#1b1b12"/>
+      <g fill="#29523d"><path d="M930 106l8-6 8 6zM950 107l7-5 7 5zM968 108l6-4 6 4z"/></g>
+      <path d="M750 116 C820 126 950 126 1030 116" stroke="#4fa39d" stroke-width="2" fill="none" opacity=".7"/>
+    </g>
+  </svg>
+  <div class="t"><h1>What Should We Protect?</h1><p>A choose-your-path conservation genomics challenge.</p></div>
+</header>
+<main>
+  <div class="trail" id="trail"></div>
+  <div id="stage"></div>
+</main>
+<div class="sheet" id="def" hidden role="dialog" aria-live="polite"><h3 id="defT"></h3><p id="defP"></p><button class="btn" type="button" id="defX">Got it</button></div>
+
+<script>
+{
+const FORM='https://docs.google.com/forms/d/e/1FAIpQLSdf1wvbXyTM9UGWoCP7IN7vihJb9hLry9F9K6NnsOl70iUgPw/viewform?usp=pp_url';
+const PR=[
+ {id:'species',name:'Species',d:'Focus on preventing extinction of the most threatened species.',e:'e.g., putting resources into a critically endangered species, like the Philippine crocodile, before it disappears.',ic:'<path d="M6 36c6-10 20-14 34-12l14 3c2 1 2 4 0 5l-14 3c-14 2-28 6-34 1z" fill="var(--water)"/><circle cx="24" cy="27" r="3" fill="var(--gold)"/>'},
+ {id:'populations',name:'Populations',d:'Protect distinct populations, even within a species that isn’t facing immediate threat.',e:'e.g., a population adapted to unusual conditions, like crocodiles living in very salty water.',ic:'<g fill="var(--water)"><circle cx="14" cy="18" r="4"/><circle cx="22" cy="14" r="4"/><circle cx="20" cy="23" r="4"/><circle cx="38" cy="38" r="4"/><circle cx="46" cy="34" r="4"/><circle cx="44" cy="44" r="4"/></g><g fill="var(--accent)"><circle cx="14" cy="42" r="4"/><circle cx="21" cy="47" r="4"/></g>'},
+ {id:'diversity',name:'Genetic diversity',d:'Maximize the total genetic variation that survives.',e:'e.g., protecting the most genetically diverse population, or reconnecting isolated ones.',ic:'<path d="M18 6c20 10 20 34 0 44M38 6c-20 10-20 34 0 44" stroke="var(--water)" stroke-width="3.5" fill="none"/><g stroke-width="3"><path d="M21 14h14" stroke="var(--accent)"/><path d="M26 22h4" stroke="var(--gold)"/><path d="M26 34h4" stroke="var(--accent)"/><path d="M21 42h14" stroke="var(--gold)"/></g>'},
+ {id:'evolution',name:'Evolutionary potential',d:'Protect the processes that let species adapt in the future.',e:'e.g., keeping habitats connected so animals can move and interbreed, or protecting areas that span a range of environments as climates change.',ic:'<path d="M28 52V32M28 32L14 18M28 32l14-14M14 18L8 8M14 18l6-10M42 18l-6-10M42 18l8-8" stroke="var(--water)" stroke-width="3.5" stroke-linecap="round" fill="none"/><circle cx="50" cy="10" r="4" fill="var(--accent)"/>'}
+];
+const A=(n,d,up,dn)=>({n,d,up,dn});
+const SC={
+species:[
+ {t:'Small and inbred',ev:'Surveys estimate about 100 individuals remain. Genomic data shows low {{genetic diversity}}, and many individuals carry long {{runs of homozygosity}}, a sign of recent {{inbreeding}}. Hatching success has dropped over the past decade.',
+  a:[A('Genetic rescue','Bring in individuals from another population to add new genetic variation.','New variation can quickly reduce the effects of inbreeding and improve hatching success.','Newcomers could carry disease or be poorly suited to local conditions, and finding a good source population takes time.'),
+     A('Genomics-guided captive breeding','Use genetic data to pair the least-related individuals in captivity, then release their offspring.','Slows further loss of diversity while protecting animals from threats.','Expensive and long-term. Captive-raised animals may struggle after release, and it can’t restore variation that’s already lost.'),
+     A('Protect nesting habitat','Guard and restore nesting sites so more hatchlings survive.','Addresses environmental causes of nest failure and benefits other wildlife too.','If inbreeding is the main problem, more hatchlings alone may not fix it.'),
+     A('Head-starting','Collect eggs, raise hatchlings in captivity, and release them at a larger, safer size.','Greatly improves survival through the most vulnerable life stage.','Doesn’t address inbreeding. If most eggs come from a few parents, it could even reduce diversity.')],
+  lim:'Only 20 of the ~100 individuals were sequenced, so the results may not represent the whole population. Hatching failure could also come from environmental causes, like nest flooding or high temperatures, rather than inbreeding.'},
+ {t:'Genetic swamping',ev:'The species is {{hybridizing|hybridization}} with an introduced crocodile species. A {{diagnostic SNP panel|snp panel}} shows about 30% of sampled individuals have mixed ancestry, and the number of pure-ancestry individuals is declining.',
+  a:[A('Remove introduced animals and hybrids','Capture and remove the introduced species and individuals with mixed ancestry.','Stops further mixing at its source.','Hard to find every animal, often controversial with the public, and older hybrids can look identical to pure individuals.'),
+     A('Protect pure-ancestry refuges','Focus protection on areas where pure individuals still breed.','Safeguards the remaining pure populations at relatively low cost.','Introduced animals may still move in, and refuges may be too small to last long-term.'),
+     A('Captive breeding of confirmed pure individuals','Genetically test animals and breed only pure individuals in captivity.','Creates a genetically secure backup population.','Requires reliable testing of every animal and long-term funding. A small captive group can become inbred.'),
+     A('Accept and monitor','Allow hybridization to continue and track how it changes over time.','Lowest cost, and hybrids might carry useful traits.','The original species could be lost as a distinct lineage.')],
+  lim:'The SNP panel was designed from only a few reference animals and may miss hybrids from several generations back. It’s also unknown whether hybrids are more fit, less fit, or about the same as pure individuals.'},
+ {t:'Tracing the illegal trade',ev:'Customs officers seized 200 crocodile skins. DNA testing confirms they come from this threatened species, and {{genetic assignment}} traces most of them to one river system.',
+  a:[A('Increase patrols at the source river','Fund rangers to patrol the river system where most skins came from.','Directly targets where the poaching is happening.','Expensive to sustain, and poachers may shift to other areas.'),
+     A('DNA testing at borders and markets','Train enforcement agencies to use DNA tests to identify species in products.','Makes illegal products easier to detect and prosecute across the whole trade.','Requires labs, training, and funding, and doesn’t stop poaching at its source.'),
+     A('Community livelihood programs','Work with local communities on alternative income, such as ecotourism.','Addresses why poaching happens and builds local support for conservation.','Takes years to show results and depends on long-term community buy-in.'),
+     A('Support regulated crocodile farming','Supply legal skins from farms to reduce demand for wild-caught skins.','Has helped reduce poaching pressure for some crocodylian species.','Without tight monitoring, farms can become a cover for laundering wild-caught skins.')],
+  lim:'The genetic reference database only includes samples from some river systems, so skins from unsampled areas could be assigned to the wrong place. Genetic assignment gives probabilities, not certainty.'}
+],
+populations:[
+ {t:'The saltwater specialists',ev:'A coastal population living in very salty water shows genetic differences from inland populations in genes linked to salt regulation, suggesting {{local adaptation}}. Planned coastal development threatens its habitat.',
+  a:[A('Protect the coast as its own management unit','Manage and protect the coastal population and its habitat separately.','Keeps the population and its habitat intact.','Likely to face strong opposition from developers, and could be costly.'),
+     A('Biobank samples','Freeze tissue and DNA from the coastal population for future research or restoration.','Inexpensive, and preserves genetic information permanently.','Doesn’t save the living population or its habitat.'),
+     A('Establish a backup population','Move some individuals to a second salty site.','Spreads the risk if the original site is lost.','Moving animals is stressful and risky. The new site may already have crocodiles, or people who object.'),
+     A('Focus on the larger inland population','Spend the funding where most individuals live.','Helps more individuals overall.','The coastal population’s unique adaptations could be lost.')],
+  lim:'These genetic differences show an association, not proof that the genes cause salt tolerance. No physiological tests have been done, and sample sizes were small.'},
+ {t:'A hidden lineage',ev:'Genetic data suggests a small island population (about 60 individuals) split from mainland populations a very long time ago and may be a distinct evolutionary lineage.',
+  a:[A('Manage as a separate conservation unit','Give the island population its own management plan.','Recognizes and protects its unique evolutionary history.','Requires separate funding and planning for very few animals.'),
+     A('Manage with mainland populations','Treat the island crocodiles as part of the mainland population.','Simpler and cheaper, and mainland animals could be brought in if numbers drop.','Mixing could erase a unique lineage.'),
+     A('Captive assurance population','Keep a backup group in captivity.','Insurance against a hurricane or disease wiping out the island population.','Costly, and small captive groups lose genetic diversity over time.'),
+     A('Request a formal taxonomic review','Ask experts to officially decide whether it’s a separate species or subspecies.','An official decision can unlock legal protection and funding.','It can take years, and the population could decline while waiting.')],
+  lim:'The evidence relies mostly on {{mitochondrial DNA}} and a few other genetic markers. More of the genome needs to be studied, and a formal taxonomic decision can take years.'},
+ {t:'The nursery lagoon',ev:'Genetic analysis of {{gene flow}} shows that most young crocodiles in the region were born in one lagoon and later dispersed to other wetlands. That lagoon has no legal protection.',
+  a:[A('Protect the source lagoon','Secure legal protection for the lagoon where most young are born.','Safeguards the place supplying young animals to the whole region.','The other wetlands, where most adults live, stay unprotected.'),
+     A('Protect where most adults live','Focus on the wetlands with the most breeding adults.','Protects the breeding adults directly.','If the source lagoon is lost, the supply of young animals to the whole region could collapse.'),
+     A('Protect dispersal routes','Keep waterways between wetlands open and safe to travel.','Maintains the connections that link the region together.','Corridors are hard to protect across private land.'),
+     A('Survey more before acting','Collect more genetic and field data before spending limited funds.','Better information before committing resources.','Development could destroy the lagoon in the meantime.')],
+  lim:'Genetic estimates of dispersal reflect movement over past generations. Recent changes, like new dams or roads, may mean the pattern no longer holds today.'}
+],
+diversity:[
+ {t:'Fragmented populations',ev:'Four populations are separated by roads and dams, so there’s little {{gene flow}} between them. Genetic data shows the populations have become increasingly different from one another (measured as {{FST|fst}}), and the smallest is losing {{genetic diversity}}.',
+  a:[A('Restore habitat corridors','Reconnect populations so animals can move between them on their own.','A long-term fix that restores natural gene flow.','Expensive and slow, and it may take years before animals use them.'),
+     A('Assisted gene flow','Move a few individuals between populations.','Quickly adds genetic variation to the smallest population.','Could cause outbreeding depression or spread disease.'),
+     A('Protect the largest, most diverse population','Focus resources on the biggest reservoir of variation.','Secures the most genetic diversity for the money.','The smallest population may disappear.'),
+     A('Captive breeding to combine lineages','Breed individuals from different populations in captivity.','Allows controlled mixing with careful monitoring.','Costly, and may erase local adaptations.')],
+  lim:'Each population might be adapted to its own habitat. Mixing them could cause {{outbreeding depression}}, where offspring are less suited to either habitat.'},
+ {t:'The captive program',ev:'A crocodile farm offers animals for release. Genetic testing shows they descend from only a few founders, so many are closely related, and some may be {{hybrids|hybridization}}.',
+  a:[A('Release them as they are','Accept the farm animals and release them all.','Fast and free, and quickly boosts numbers.','Could add inbred or hybrid animals to the wild population.'),
+     A('Screen and release selectively','Genetically test animals and release only unrelated, pure-ancestry individuals.','Keeps the benefits while reducing genetic risks.','Testing costs money, and few animals may pass.'),
+     A('Add new wild founders first','Bring wild individuals into the breeding program before releasing any.','Improves the farm’s genetic diversity for future releases.','Delays releases for years and removes animals from the wild.'),
+     A('Skip the farm and protect wild habitat','Decline the offer and invest in habitat instead.','Avoids the genetic risks entirely.','Misses a chance to boost a declining population.')],
+  lim:'Genetic reference data from the wild population is incomplete, so “pure” ancestry can’t be confirmed with confidence.'},
+ {t:'Fewer parents than it seems',ev:'Surveys count about 500 adults, but paternity testing of hatchlings shows that a few large males father most nests. The {{effective population size}} is estimated at only about 50.',
+  a:[A('Protect more nesting areas','Expand protection to nesting sites across the range.','Gives more adults a chance to breed successfully.','Large areas are expensive to protect.'),
+     A('Reduce harvest of breeding adults','Limit legal harvest or culling of adult crocodiles.','Keeps more breeders in the population.','May face resistance where crocodiles are harvested or seen as a danger.'),
+     A('Bring in adults from another population','Translocate new adults to add breeders and variation.','Adds new genetic variation and potential breeders.','Risks disease, conflict with resident animals, and outbreeding depression.'),
+     A('Monitor for several more seasons','Repeat paternity testing over more breeding seasons.','Confirms whether this is a lasting pattern.','Genetic diversity may keep declining while waiting.')],
+  lim:'Effective population size estimates have wide uncertainty, and only one breeding season was sampled. Breeding patterns can change from year to year.'}
+],
+evolution:[
+ {t:'A natural hybrid zone',ev:'Two native species naturally hybridize where rivers meet the sea. Genomic data suggests {{adaptive introgression}}: gene variants linked to salt tolerance appear to be passing from one species into the other.',
+  a:[A('Protect the whole gradient','Protect the full range from fresh to salty water, including the hybrid zone.','Keeps the natural process of adaptation going.','Some managers see hybrids as a threat to the pure species.'),
+     A('Protect only core areas of each species','Focus on areas where each species lives separately.','Prioritizes each species’ distinct identity.','May cut off a natural source of adaptive variation.'),
+     A('Monitor without intervening','Track the hybrid zone over time without changing it.','Low cost, and lets scientists learn how the system works.','If conditions change quickly, there may be no time to act later.'),
+     A('Manage to limit hybridization','Take steps to reduce mixing between the species.','Reduces the risk of one species absorbing the other.','Could block helpful gene variants, and is very hard to do.')],
+  lim:'It’s difficult to tell whether these gene variants are truly helpful or just moving between species by chance, and whether they’ll be enough as salinity changes.'},
+ {t:'Connectivity under climate change',ev:'{{Gene flow|gene flow}} connects crocodiles across a network of coastal wetlands, and the populations carry genetic variation linked to temperature and salinity. Sea level rise and planned development threaten to cut the wetlands apart.',
+  a:[A('Protect the whole wetland network','Conserve all the wetlands and the connections between them.','Keeps gene flow and options for adaptation open.','Very expensive, and may require many landowners to agree.'),
+     A('Protect only the largest wetland','Focus on the single biggest wetland.','Affordable, and secures the most animals.','Isolated populations lose diversity and options for adaptation.'),
+     A('Assisted migration','Move individuals to higher-elevation wetlands that won’t flood.','Gets ahead of sea level rise.','New sites may be unsuitable, or bring crocodiles closer to people.'),
+     A('Biobank DNA samples','Freeze samples from across the network as a backup.','Preserves genetic variation cheaply.','Doesn’t protect living populations or the processes of adaptation.')],
+  lim:'Genetic associations with the environment can’t reliably predict how populations will adapt in the future. Most of the data came from a single sampling season.'},
+ {t:'Heating nests',ev:'Crocodiles have {{temperature-dependent sex determination}}. At open, sunny nesting beaches, rising temperatures now produce mostly females. Genomic data shows the population still has high {{genetic diversity}} and gene flow with populations that nest in shaded river habitats.',
+  a:[A('Protect a range of nesting habitats','Conserve both shaded and open nesting areas.','Gives the population a range of nest temperatures to work with.','Requires protecting a lot of land.'),
+     A('Shade or relocate nests','Manage nest temperatures directly in the field.','Balances sex ratios in the short term.','Labor-intensive, and must continue every year.'),
+     A('Incubate eggs at controlled temperatures','Collect eggs and incubate them in a facility.','Precise control over sex ratios.','Costly, and releasing captive-incubated hatchlings has its own risks.'),
+     A('Let natural selection act, and monitor','Allow the population to adapt on its own while tracking it.','Lets the population respond naturally, such as by shifting nest sites or timing.','Adaptation may be too slow to keep up with warming.')],
+  lim:'Genomic data can’t measure sex ratios or tell us whether crocodiles will shift their nesting behavior. Answering that requires field data on nest temperatures and hatchlings.'}
+]};
+const SUR=[
+ 'Your funding has just been cut in half.',
+ 'A disease is detected in nearby crocodiles. Moving animals now risks spreading it.',
+ 'A hurricane destroys a major nesting area.',
+ 'A crocodile attack on a person creates public pressure to remove animals from the area.',
+ 'A new study with a larger sample finds more genetic diversity than first reported.',
+ 'A neighboring country commits funding to protect the species across most of its range.',
+ 'The government reduces the boundaries of the protected area.',
+ 'The genomic lab announces your follow-up results will be delayed by 2 years.'
+];
+const GL={
+ 'genetic diversity':'The variety of genetic differences among individuals in a population. More diversity generally means more ability to cope with disease and change.',
+ 'inbreeding':'Mating between close relatives. It can increase harmful genetic effects and reduce survival and reproduction.',
+ 'runs of homozygosity':'Long stretches of DNA where both copies (one from each parent) are identical, usually because the parents were related. Longer runs point to more recent inbreeding.',
+ 'hybridization':'Interbreeding between two different species, producing offspring with mixed ancestry (hybrids).',
+ 'snp panel':'A genetic test that checks a set of known DNA positions (SNPs, single-letter differences in DNA) that differ between species or populations.',
+ 'local adaptation':'When a population becomes genetically suited to its particular environment.',
+ 'mitochondrial dna':'DNA found in mitochondria and inherited only from the mother. Useful for tracing ancestry, but it tells only part of the story.',
+ 'gene flow':'The movement of genes between populations when individuals move and breed.',
+ 'fst':'A measure of how genetically different populations are from each other, from 0 (identical) to 1 (completely different).',
+ 'outbreeding depression':'Reduced fitness in offspring of parents from genetically different populations, often because local adaptations are broken up.',
+ 'adaptive introgression':'When helpful gene variants move from one species into another through hybridization.',
+ 'temperature-dependent sex determination':'In crocodylians, the temperature of the nest during incubation, not sex chromosomes, determines whether a hatchling is male or female.',
+ 'effective population size':'The number of individuals effectively passing genes to the next generation. It’s often much smaller than the total number of adults.',
+ 'genetic assignment':'Using DNA to work out which population an individual most likely came from, by comparing it with reference samples.'
+};
+const LIM=['Go ahead as planned','Go ahead, but collect more data along the way','Pause and collect more data first'];
+const HOLD=['My plan still holds','I’d adjust my plan','I’d change my plan entirely'];
+const STEPS=['Priority','Evidence','Action','Outcomes','Limits','Surprise','Recommend'];
+const blank=()=>({step:0,name:'',pri:null,why:'',sc:-1,read:'',act:-1,how:'',lim:-1,info:'',sur:-1,hold:-1,exp:'',fin:null,trade:''});
+let S=blank();
+try{const s=JSON.parse(localStorage.getItem('wswp2')||'null');if(s)S=Object.assign(S,s)}catch(e){}
+const save=()=>{try{localStorage.setItem('wswp2',JSON.stringify(S))}catch(e){}};
+const $=id=>document.getElementById(id);
+const esc=t=>String(t).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const plain=s=>s.replace(/\{\{([^}|]+)(?:\|[^}]+)?\}\}/g,'$1');
+const tx=s=>s.replace(/\{\{([^}|]+)(?:\|([^}]+))?\}\}/g,(m,d,k)=>`<button type="button" class="term" data-k="${(k||d).toLowerCase()}">${d}</button>`);
+const pn=id=>(PR.find(p=>p.id===id)||{}).name||'';
+const sc=()=>S.pri&&S.sc>=0?SC[S.pri][S.sc]:null;
+const act=()=>sc()&&S.act>=0?sc().a[S.act]:null;
+const rnd=n=>Math.floor(Math.random()*n);
+const ta=(id,lab,hint,ph)=>`<label for="${id}">${lab} ${hint?`<span>${hint}</span>`:''}</label><textarea id="${id}" data-s="${id}" placeholder="${ph}">${esc(S[id])}</textarea>`;
+const cards=(key)=>`<div class="cards">${PR.map(p=>`<button class="card" type="button" data-pick="${key}" data-v="${p.id}" aria-pressed="${S[key]===p.id}"><svg viewBox="0 0 56 56" aria-hidden="true">${p.ic}</svg><h3>${p.name}</h3><div class="d">${p.d}</div><div class="e">${p.e}</div></button>`).join('')}</div>`;
+const opts=(key,list)=>`<div class="opts" role="group">${list.map((o,i)=>`<button class="opt" type="button" data-pick="${key}" data-v="${i}" aria-pressed="${S[key]===i}">${typeof o==='string'?`<b>${o}</b>`:`<b>${o.n}</b><span>${o.d}</span>`}</button>`).join('')}</div>`;
+const nav=(back,label)=>`<div class="nav">${back?'<button class="btn ghost" type="button" id="back">Back</button>':''}<button class="btn" type="button" id="next">${label||'Continue'}</button><span class="hint" id="need"></span></div>`;
+const valid=()=>{const t=k=>S[k].trim().length>0;switch(S.step){case 0:return t('name');case 1:return !!S.pri&&t('why');case 2:return t('read');case 3:return S.act>=0&&t('how');case 5:return S.lim>=0&&t('info');case 6:return S.hold>=0&&t('exp');default:return true}};
+
+function summary(){
+ const c=sc(),a=act();
+ return [
+  ['What conservation action should be prioritized, and why?',`Starting priority: ${pn(S.pri)}${S.fin&&S.fin!==S.pri?` → final priority: ${pn(S.fin)}`:S.fin?' (unchanged)':''}\nWhy: ${S.why}\nAction: ${a?a.n:''}`],
+  ['How did the genomic information help inform your decision?',`Evidence (${c?c.t:''}): ${S.read}\nHow it shaped my choice: ${S.how}`],
+  ['What additional information would you want before implementing your plan?',`${S.lim>=0?LIM[S.lim]+'. ':''}${S.info}`],
+  ['What is one limitation or trade-off your organization needs to consider?',S.trade],
+  ['Unexpected complication',`${S.sur>=0?SUR[S.sur]:''}\n${S.hold>=0?HOLD[S.hold]+': ':''}${S.exp}`]
+ ];
+}
+function formLink(){
+ const c=sc(),a=act();
+ const F=[[587527164,S.name],[2036268426,pn(S.pri)],[621533041,S.why],[1266682144,c?c.t:''],[548061023,S.read],[537785981,a?a.n:''],[450633267,S.how],
+  [498992098,S.lim>=0?LIM[S.lim]:''],[433864767,S.info],[1073635955,S.sur>=0?SUR[S.sur]:''],[461655265,S.hold>=0?HOLD[S.hold]:''],[527406987,S.exp],[407142961,pn(S.fin)],[890906508,S.trade]];
+ return FORM+F.filter(f=>f[1]).map(f=>'&entry.'+f[0]+'='+encodeURIComponent(f[1])).join('');
+}
+
+function render(){
+ $('trail').innerHTML=S.step?STEPS.map((s,i)=>`<span class="${i+1===S.step?'on':i+1<S.step?'done':''}">${i+1}. ${s}</span>`).join(''):'';
+ const c=sc(),a=act();let h='';
+ switch(S.step){
+ case 0:h=`<div class="kick">Your mission</div><h2>You’ve joined a crocodile conservation team</h2>
+  <p class="lead">You are part of a wildlife conservation team responsible for advising on the future of a threatened crocodile population. Researchers have collected some genomic data, but your team has limited funding, incomplete information, and several competing conservation priorities.</p>
+  <p class="lead">Your job is to interpret the evidence, decide what you would recommend, and explain what additional information you would need before making a final decision. <strong>There is no one perfect answer.</strong> This assignment is meant to help you think critically through the kinds of real-life decisions that come up in conservation.</p>
+  <p class="hint">Tap any <span class="term" style="cursor:default">underlined term</span> for a quick definition. Plan on about 25–35 minutes.</p>
+  <label for="name">Your name</label><input type="text" id="name" data-s="name" autocomplete="name" value="${esc(S.name)}" placeholder="First and last name">${nav(false,'Start')}`;break;
+ case 1:h=`<div class="kick">Step 1</div><h2>What should your team prioritize?</h2><p class="lead">Your team has enough funding for <strong>one major action over the next 5–10 years</strong>. Choose the priority that will guide your decisions.</p>${cards('pri')}${ta('why','Why did you choose this priority?','What values or goals led you here?','I chose this because...')}${nav(false)}`;break;
+ case 2:h=`<div class="kick">Step 2</div><h2>The evidence comes in</h2><p class="lead">Your team focused on <strong>${pn(S.pri)}</strong>. Researchers send back their findings.</p>
+  <div class="report"><div class="k">Lab report</div><h3>${c.t}</h3><p>${tx(c.ev)}</p></div>${ta('read','In your own words, what is this evidence telling you?','','The genetic data suggests...')}${nav(true)}`;break;
+ case 3:h=`<div class="kick">Step 3</div><h2>Choose a conservation action</h2><p class="lead">Based on the evidence from <strong>${c.t}</strong>, which action would your team recommend?</p>${opts('act',c.a)}${ta('how','How did the genomic evidence shape your choice?','','Because the DNA showed...')}${nav(true)}`;break;
+ case 4:h=`<div class="kick">Step 4</div><h2>What could happen?</h2><p class="lead">You chose <strong>${a.n}</strong>. Every conservation action comes with possible benefits and risks.</p>
+  <div class="ud"><div><b>What could go well</b>${tx(a.up)}</div><div class="dn"><b>What could go wrong</b>${tx(a.dn)}</div></div><p class="hint">Keep these in mind. You’ll come back to them.</p>${nav(true)}`;break;
+ case 5:h=`<div class="kick">Step 5</div><h2>What the data can’t tell you</h2><p class="lead">Genomic data is powerful, but it has limits. Your team’s geneticist flags a concern.</p>
+  <div class="report"><div class="k">Limitation</div><p>${tx(c.lim)}</p></div><label>Given this limitation, what should your team do?</label>${opts('lim',LIM)}${ta('info','What additional information would you want before implementing your plan?','','Before moving forward, I would want to know...')}${nav(true)}`;break;
+ case 6:h=`<div class="kick">Step 6</div><h2>An unexpected complication</h2><p class="lead">Just as your team is about to move forward with <strong>${a.n}</strong>...</p>
+  <div class="report"><div class="k">Breaking news</div><p>${SUR[S.sur]}</p></div><label>Does your plan still hold?</label>${opts('hold',HOLD)}${ta('exp','Explain your decision','How does this change, or not change, your thinking?','After this news, I...')}${nav(true)}`;break;
+ case 7:{const ok=S.fin&&S.trade.trim();
+  h=`<div class="kick">Step 7</div><h2>Your final recommendation</h2><p class="lead">After everything your team has learned, what should be the <strong>ultimate conservation priority</strong>? You may keep your original choice (<strong>${pn(S.pri)}</strong>) or change it.</p>${cards('fin')}
+  ${ta('trade','What is one limitation or trade-off your organization needs to consider?','','Our organization has to accept that...')}
+  <div class="sum" id="sum">${summary().map(([q,t])=>`<h3>${q}</h3><p>${esc(t)}</p>`).join('')}</div>
+  <div class="nav"><button class="btn ghost" type="button" id="back">Back</button><a class="btn" id="submit" href="${ok?formLink():'#'}" target="_blank" rel="noopener" aria-disabled="${!ok}">Submit to instructor</a><button class="btn ghost" type="button" id="copy">Copy for discussion board</button><span class="ok" id="msg" role="status"></span></div>
+  <p class="hint">“Submit to instructor” opens a Google Form with your answers filled in. Check them, then press <strong>Submit</strong> on the form.</p>
+  <h2 style="font-size:26px;margin-top:34px">Other paths you could have taken</h2><p class="lead">Teams that started from the same evidence could have chosen very differently. Here’s how the other options might have played out.</p>
+  <div class="paths">${c.a.map((o,i)=>i===S.act?'':`<div><b>${o.n}</b><br><span style="color:var(--up)">↑</span> ${tx(o.up)}<br><span style="color:var(--dn)">↓</span> ${tx(o.dn)}</div>`).join('')}</div>
+  <div class="nav"><button class="btn ghost" type="button" id="again">Explore another path</button></div>`;}
+ }
+ const st=$('stage');st.innerHTML=h;st.style.animation='none';st.offsetHeight;st.style.animation='';
+ upd();
+}
+function upd(){
+ const n=$('next');if(n){n.disabled=!valid();$('need').textContent=valid()?'':'Make a choice and write a response to continue.'}
+ if(S.step===7){const ok=!!(S.fin&&S.trade.trim()),b=$('submit');b.setAttribute('aria-disabled',String(!ok));b.href=ok?formLink():'#';
+  $('sum').innerHTML=summary().map(([q,t])=>`<h3>${q}</h3><p>${esc(t)}</p>`).join('')}
+}
+const go=s=>{S.step=s;if(s===6&&S.sur<0)S.sur=rnd(SUR.length);save();render();scrollTo({top:0})};
+const msg=t=>{const m=$('msg');if(m){m.textContent=t;setTimeout(()=>m.textContent='',2500)}};
+
+$('stage').addEventListener('input',e=>{const k=e.target.dataset.s;if(k){S[k]=e.target.value;save();upd()}});
+$('stage').addEventListener('click',e=>{
+ const t=e.target.closest('.term');if(t){const k=t.dataset.k;$('defT').textContent=t.textContent;$('defP').textContent=GL[k]||'';$('def').hidden=false;$('defX').focus();return}
+ const p=e.target.closest('[data-pick]');
+ if(p){const k=p.dataset.pick,v=p.dataset.v;
+  if(k==='pri'){if(S.pri!==v){S.pri=v;S.sc=rnd(SC[v].length);S.act=-1}}
+  else if(k==='fin')S.fin=v;else S[k]=+v;
+  save();const y=scrollY;render();scrollTo({top:y});return}
+ const id=e.target.id;
+ if(id==='next'&&valid())go(S.step+1);
+ else if(id==='back')go(S.step-1);
+ else if(id==='again'){const n=S.name;S=blank();S.name=n;go(1)}
+ else if(id==='submit'&&e.target.getAttribute('aria-disabled')==='true'){e.preventDefault();msg(S.fin?'Add a trade-off first':'Choose a final priority first')}
+ else if(id==='copy'){const t=`${S.name}\n\n`+summary().map(([q,x])=>q+'\n'+x).join('\n\n');
+  try{navigator.clipboard.writeText(t).then(()=>msg('Copied!'),()=>msg('Copy failed. Select the summary and copy it.'))}catch(err){msg('Copy failed. Select the summary and copy it.')}}
+});
+$('defX').addEventListener('click',()=>{$('def').hidden=true});
+document.addEventListener('keydown',e=>{if(e.key==='Escape')$('def').hidden=true});
+if(S.step>0&&!sc())S.step=1;
+if(S.step>3&&!act())S.step=3;
+render();
+}
+</script>
+</body>
+</html>
